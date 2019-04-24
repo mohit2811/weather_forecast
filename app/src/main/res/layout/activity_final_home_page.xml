@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/drawer_layout">
+<ImageView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:src="@drawable/weather_background44"
+    android:visibility="gone"
+    android:scaleType="centerCrop"
+    android:id="@+id/default_img"/>
+
+<android.support.v4.view.ViewPager
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/viewPager"></android.support.v4.view.ViewPager>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:id="@+id/drewer"
+        android:background="#000"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/user"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/user"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign in/Sign up"
+                android:textColor="#fff"
+                android:textSize="15dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:gravity="center"
+                android:id="@+id/sign_in_up"
+                android:onClick="sign_in_up_btn"
+                />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#96ffffff"
+            android:layout_marginTop="10dp">
+        </View>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            >
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/add_location"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Location"
+                android:textSize="15dp"
+                android:id="@+id/add_location"
+                android:textColor="#fff"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:onClick="add_location"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tools"
+            android:textSize="15dp"
+            android:layout_margin="10dp"
+            android:textColor="#fff"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            >
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/setting"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Setting"
+                android:textSize="15dp"
+                android:id="@+id/setting"
+                android:textColor="#fff"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:onClick="setting"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            >
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/share"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Share"
+                android:textSize="15dp"
+                android:id="@+id/share"
+                android:textColor="#fff"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:onClick="share_button"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            >
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/star"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rate this app"
+                android:textSize="15dp"
+                android:id="@+id/rate_app"
+                android:textColor="#fff"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:onClick="rate_app"
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            >
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/logout"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign out"
+                android:textSize="15dp"
+                android:id="@+id/logout"
+                android:textColor="#fff"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:onClick="logout"
+                />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WEATHER"
+                android:textColor="#fff"
+                android:textSize="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/weather_txt"
+                android:layout_above="@+id/term_policies"
+                android:layout_marginBottom="40dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Term and Policies"
+                android:textColor="#fff"
+                android:textSize="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_alignParentBottom="true"
+               android:layout_centerHorizontal="true"
+                android:id="@+id/term_policies"
+                android:layout_marginBottom="20dp"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+
+</android.support.v4.widget.DrawerLayout>

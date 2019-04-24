@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.god.weatherlayout">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/weathericon4"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.NoActionBar">
+        <activity
+            android:name=".welcome_page"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".sign_in"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".sign_up"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".final_home_page"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CameraActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Image_galary"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".weather_information"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".add_new_location"
+            android:screenOrientation="portrait" />
+        <activity android:name=".setting" />
+        <activity android:name=".pop_up" />
+        <activity android:name=".forgot_password" />
+        <activity android:name=".Upload_image" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCoACGzF9Lu5-wyl7_gWyuYyedA4P7wUz0" />
+        <activity android:name=".View_Image" />
+        <activity android:name=".Comments"/>
+    </application>
+
+</manifest>
