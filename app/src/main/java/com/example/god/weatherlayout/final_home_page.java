@@ -1,16 +1,20 @@
 package com.example.god.weatherlayout;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -30,16 +34,31 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class final_home_page extends FragmentActivity
 
 {
 
+    private static final int PERMISSION_REQUEST_CODE = 200;
     DrawerLayout d;
     static ViewPager pager;
+
+
+    List<String> locations_list ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_final_home_page);
+
+        locations_list = new ArrayList<>();
+
+        locations_list.add("Amritsar");
+        locations_list.add("Delhi");
+        locations_list.add("Palampur");
+        locations_list.add("Manali");
 
         ImageView img = (ImageView) findViewById(R.id.default_img);
         SharedPreferences sp = getSharedPreferences("user_info" , MODE_PRIVATE);
@@ -60,6 +79,16 @@ public class final_home_page extends FragmentActivity
         pager = (ViewPager) findViewById(R.id.viewPager);
 
 
+        pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager() , locations_list));
+
+        if (checkPermission()) {
+            //main logic or main code
+
+            // . write your main code to execute, It will execute if the permission is already given.
+
+        } else {
+            requestPermission();
+        }
 
 
     }
@@ -113,34 +142,31 @@ public class final_home_page extends FragmentActivity
 
     private static class MyPagerAdapter extends FragmentPagerAdapter {
 
-        JSONArray jarr ;
+        List<String> loc_list ;
 
-        public MyPagerAdapter(FragmentManager fm , JSONArray jarr) {
+        public MyPagerAdapter(FragmentManager fm , List<String> loc_list) {
             super(fm);
 
-            this.jarr = jarr;
+            this.loc_list = loc_list;
         }
 
         @Override
         public Fragment getItem(int pos) {
-            if(pos < jarr.length())
+
+            if(pos < loc_list.size())
             {
-                try {
-                    JSONObject job = jarr.getJSONObject(pos);
 
                     Bundle b = new Bundle();
 
-                    b.putString("city", job.getString("city"));
-                    b.putString("loc_id", job.getString("location_id"));
+                    b.putString("city", loc_list.get(pos));
+
 
                     Fragment f = new First_Location();
 
                     f.setArguments(b);
                     return f;
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+
 
             }
             return null;
@@ -148,7 +174,9 @@ public class final_home_page extends FragmentActivity
 
         @Override
         public int getCount() {
-            return jarr.length();
+
+
+            return loc_list.size();
         }
     }
 
@@ -283,5 +311,25 @@ public class final_home_page extends FragmentActivity
             }
         });
 
+    }
+
+
+
+    // camera permission code //
+
+    private boolean checkPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            return false;
+        }
+        return true;
+    }
+
+    private void requestPermission() {
+
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.CAMERA},
+                PERMISSION_REQUEST_CODE);
     }
 }
