@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+
 public class View_Image extends AppCompatActivity {
 
     ImageView img;
@@ -16,9 +18,6 @@ public class View_Image extends AppCompatActivity {
 
         img = (ImageView) findViewById(R.id.big_image);
 
-        byte[] byteArray = getIntent().getByteArrayExtra("image");
-        Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-
-        img.setImageBitmap(bmp);
+        Glide.with(this).load(getIntent().getStringExtra("image")).into(img);
     }
 }
