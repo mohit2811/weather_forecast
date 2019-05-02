@@ -318,6 +318,7 @@ public class final_home_page extends FragmentActivity
     // camera permission code //
 
     private boolean checkPermission() {
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted
