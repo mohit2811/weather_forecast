@@ -72,7 +72,7 @@ public class First_Location extends Fragment {
             @Override
             public void onClick(View v) {
 
-//                final_home_page.remove_loc(getArguments().getString("loc_id"),getActivity());
+                final_home_page.remove_loc(getActivity());
             }
         });
 
@@ -102,8 +102,7 @@ public class First_Location extends Fragment {
 
         city.setText(getArguments().getString("city"));
 
-        List<String> cityList = Arrays.asList(getArguments().getString("city").split(","));
-//        get_weather(cityList.get(0));
+         System.out.println("******************** city name is ****************** "+getArguments().getString("city"));
 
         sunrise_et = v.findViewById(R.id.sunrise_et);
         wind_et = v.findViewById(R.id.wind_et);

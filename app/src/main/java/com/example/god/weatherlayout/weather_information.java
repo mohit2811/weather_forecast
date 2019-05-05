@@ -1,5 +1,6 @@
 package com.example.god.weatherlayout;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -29,6 +30,8 @@ public class weather_information extends AppCompatActivity {
 
     RecyclerView image_recycle ;
 
+    ProgressDialog pd ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +39,11 @@ public class weather_information extends AppCompatActivity {
 
         image_recycle = (RecyclerView) findViewById(R.id.image_recycler);
         image_recycle.setLayoutManager(new LinearLayoutManager(weather_information.this , LinearLayoutManager.VERTICAL , false));
+
+        pd = new ProgressDialog(weather_information.this);
+
+        pd.setTitle("Loading");
+        pd.setMessage("Please wait ...");
 
         get_images();
     }
@@ -45,60 +53,11 @@ public class weather_information extends AppCompatActivity {
     }
 
 
-    /*public void get_images()*/
-/*
-    {
-
-
-
-
-        JSONObject job = new JSONObject();
-
-        try {
-
-            job.put("city",getIntent().getStringExtra("city"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(job);
-
-        JsonObjectRequest jobreq = new JsonObjectRequest("http://"+ip_address.ip+"/weather_forecast/get_image.php", job, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-
-                try {
-
-                    JSONArray jarr = response.getJSONArray("result");
-                    images_adapter ad = new images_adapter(jarr , weather_information.this);
-
-                    image_recycle.setAdapter(ad);
-
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error)
-
-            {
-                System.out.println(error);
-            }
-        });
-
-        app_controller.AppController app = new app_controller.AppController(weather_information.this);
-
-        app.addToRequestQueue(jobreq);
-    }
-*/
 
 
     private void get_images()
     {
+        pd.show();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
@@ -115,13 +74,22 @@ public class weather_information extends AppCompatActivity {
 
                 List<Images_data_model> list = new ArrayList<>();
 
+                pd.hide();
+
                 for(DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
 
                     Images_data_model data_model = snapshot.getValue(Images_data_model.class);
 
+                    data_model.image_id = snapshot.getKey();
 
-                    list.add(data_model);
+
+                    if(data_model.location.equalsIgnoreCase(getIntent().getStringExtra("city"))) {
+
+
+                        list.add(data_model);
+
+                    }
 
                 }
 

@@ -50,11 +50,16 @@
         <activity android:name=".forgot_password" />
         <activity android:name=".Upload_image" />
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCoACGzF9Lu5-wyl7_gWyuYyedA4P7wUz0" />
+
+
+
         <activity android:name=".View_Image" />
         <activity android:name=".Comments"/>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBpW1dY4nmyjv_DLUc9Zz-fZ1YtCd9s9l0" />
+
     </application>
 
 </manifest>

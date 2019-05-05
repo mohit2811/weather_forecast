@@ -9,18 +9,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 /**
  * Created by ghumman on 5/17/2017.
  */
 
 public class Comment_adapter extends RecyclerView.Adapter<Comments_view_holder> {
 
-    JSONArray jarr ;
+    List<CommentDataModel> comment_list ;
+
     Activity a;
 
-    public Comment_adapter(JSONArray jarr , Activity a)
+    public Comment_adapter(List<CommentDataModel> comment_list , Activity a)
     {
-        this.jarr = jarr ;
+        this.comment_list = comment_list;
         this.a = a;
     }
     @Override
@@ -32,17 +35,16 @@ public class Comment_adapter extends RecyclerView.Adapter<Comments_view_holder> 
     @Override
     public void onBindViewHolder(Comments_view_holder holder, int position) {
 
-        try {
-            JSONObject job = jarr.getJSONObject(position);
-            holder.user_name.setText(job.getString("Name"));
-            holder.comment.setText(job.getString("Comment"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        CommentDataModel dataModel = comment_list.get(position);
+
+
+            holder.user_name.setText(dataModel.name);
+            holder.comment.setText(dataModel.comment);
+
     }
 
     @Override
     public int getItemCount() {
-        return jarr.length();
+        return comment_list.size();
     }
 }
