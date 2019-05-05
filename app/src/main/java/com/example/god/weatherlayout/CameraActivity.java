@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -44,6 +45,8 @@ public class CameraActivity extends AppCompatActivity {
 
     ProgressDialog pd;
 
+    EditText description_et ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +55,8 @@ public class CameraActivity extends AppCompatActivity {
         img = (ImageView) findViewById(R.id.cliked_image);
 
         pd = new ProgressDialog(CameraActivity.this);
+
+        description_et = findViewById(R.id.description_et);
 
         pd.setTitle("Loading");
 
@@ -188,7 +193,9 @@ public class CameraActivity extends AppCompatActivity {
 
         data_model.image = url;
 
-        data_model.description = "";
+        data_model.description = description_et.getText().toString();
+
+        data_model.location = getIntent().getStringExtra("city");
 
         reference.push().setValue(data_model).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

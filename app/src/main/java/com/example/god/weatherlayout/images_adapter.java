@@ -47,6 +47,8 @@ public class images_adapter extends RecyclerView.Adapter<images_view_holder> {
 
         Glide.with(a).load(data_model.image).into(holder.img);
 
+        holder.description.setText(data_model.description);
+
 
 
             holder.img.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +59,7 @@ public class images_adapter extends RecyclerView.Adapter<images_view_holder> {
 
                     Intent in1 = new Intent(a, View_Image.class);
                     in1.putExtra("image",data_model.image);
+                    in1.putExtra("image_id" , data_model.image_id);
 
                     a.startActivity(in1);
 

@@ -1,5 +1,6 @@
 package com.example.god.weatherlayout;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -24,12 +25,19 @@ import org.json.JSONObject;
 public class add_new_location extends AppCompatActivity {
 
     private EditText  country_et;
-    private String loc_s;
+    private String loc_s = "";
+
+    ProgressDialog pd ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_location);
+
+        pd = new ProgressDialog(add_new_location.this);
+
+        pd.setMessage("Please wait...");
+        pd.setTitle("Loading");
 
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.enter_city);
@@ -37,7 +45,7 @@ public class add_new_location extends AppCompatActivity {
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
+
                 Log.i("", "Place: " + place.getName());
 
                 loc_s = place.getAddress().toString();
@@ -47,7 +55,7 @@ public class add_new_location extends AppCompatActivity {
 
             @Override
             public void onError(Status status) {
-                // TODO: Handle the error.
+
                 Log.i("", "An error occurred: " + status);
             }
         });
@@ -63,14 +71,25 @@ public class add_new_location extends AppCompatActivity {
             Toast.makeText(add_new_location.this , "please select your city" , Toast.LENGTH_SHORT).show();
             return;
         }
+
+        pd.show();
+
         SharedPreferences sp = getSharedPreferences("user_info" , MODE_PRIVATE);
+
         String email = sp.getString("user_id" , "");
         String name = sp.getString("user_name" , "");
-        createaccount data = new createaccount(name, email,loc_s);
+
+        locationDataModel dataModel = new locationDataModel();
+
+        dataModel.location = loc_s;
+
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        database.getReference().child("user").child(email.replace(".","")).setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+        database.getReference().child("locations").child(email.replace(".","")).push().setValue(dataModel).addOnCompleteListener(new OnCompleteListener<Void>() {
 
             public void onComplete(@NonNull Task<Void> task) {
+
+                pd.hide();
 
                 if(task.isSuccessful())
                 {

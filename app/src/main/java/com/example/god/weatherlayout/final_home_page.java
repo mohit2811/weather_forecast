@@ -2,6 +2,7 @@ package com.example.god.weatherlayout;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,7 +29,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,7 +52,9 @@ public class final_home_page extends FragmentActivity
     static ViewPager pager;
 
 
-    List<String> locations_list ;
+    static List<locationDataModel> locations_list ;
+
+    static   ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +63,12 @@ public class final_home_page extends FragmentActivity
 
         locations_list = new ArrayList<>();
 
-        locations_list.add("Amritsar");
-        locations_list.add("Delhi");
-        locations_list.add("Palampur");
-        locations_list.add("Manali");
+        pd = new ProgressDialog(final_home_page.this);
+
+        pd.setTitle("Loading");
+        pd.setMessage("Please wait ..");
+
+
 
         ImageView img = (ImageView) findViewById(R.id.default_img);
         SharedPreferences sp = getSharedPreferences("user_info" , MODE_PRIVATE);
@@ -79,7 +89,7 @@ public class final_home_page extends FragmentActivity
         pager = (ViewPager) findViewById(R.id.viewPager);
 
 
-        pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager() , locations_list));
+
 
         if (checkPermission()) {
             //main logic or main code
@@ -89,6 +99,8 @@ public class final_home_page extends FragmentActivity
         } else {
             requestPermission();
         }
+
+        get_locations();
 
 
     }
@@ -142,9 +154,9 @@ public class final_home_page extends FragmentActivity
 
     private static class MyPagerAdapter extends FragmentPagerAdapter {
 
-        List<String> loc_list ;
+        List<locationDataModel> loc_list ;
 
-        public MyPagerAdapter(FragmentManager fm , List<String> loc_list) {
+        public MyPagerAdapter(FragmentManager fm , List<locationDataModel> loc_list) {
             super(fm);
 
             this.loc_list = loc_list;
@@ -158,7 +170,7 @@ public class final_home_page extends FragmentActivity
 
                     Bundle b = new Bundle();
 
-                    b.putString("city", loc_list.get(pos));
+                    b.putString("city", loc_list.get(pos).location);
 
 
                     Fragment f = new First_Location();
@@ -180,61 +192,7 @@ public class final_home_page extends FragmentActivity
         }
     }
 
-   /* public static void get_locations(final FragmentActivity a)
 
-    {
-        SharedPreferences sp = a.getSharedPreferences("user_info" , MODE_PRIVATE);
-
-        String userid = sp.getString("user_id" , "");
-
-        JSONObject jobj = new JSONObject();
-
-        try {
-            jobj.put("userid" , userid);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(jobj);
-        JsonObjectRequest jobjreq = new JsonObjectRequest("http://"+ip_address.ip+"/weather_forecast/get_locations.php",
-                jobj, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-
-
-                    JSONArray jarr = response.getJSONArray("locations");
-
-                    if(jarr.length() == 0)
-                    {
-                        Intent i = new Intent(a , add_new_location.class);
-
-                        a.startActivity(i);
-                        return;
-                    }
-                    pager.setAdapter(new MyPagerAdapter(a.getSupportFragmentManager() , jarr));
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        },new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                System.out.println(error);
-
-            }
-        });
-
-
-        jobjreq.setRetryPolicy(new DefaultRetryPolicy(20000, 3 , 2));
-
-        app_controller.AppController app = new app_controller.AppController(a);
-        app.addToRequestQueue(jobjreq);
-    }*/
 
     @Override
     protected void onResume() {
@@ -273,6 +231,8 @@ public class final_home_page extends FragmentActivity
 
     public void logout(View v){
 
+        FirebaseAuth.getInstance().signOut();
+
         SharedPreferences.Editor sp = getSharedPreferences("user_info" , MODE_PRIVATE).edit();
 
         sp.clear();
@@ -285,28 +245,35 @@ public class final_home_page extends FragmentActivity
 
 
 
-    public void  remove_loc( View v)
+    public static void  remove_loc(final Context context )
     {
 
-      SharedPreferences sp = getSharedPreferences("user_info" , MODE_PRIVATE);
-        String email = sp.getString("user_id" , "");
-        String name = sp.getString("user_name" , "");
+        FirebaseAuth auth = FirebaseAuth.getInstance();
 
-        createaccount data = new createaccount(name, email,"null");
+
+        String email = auth.getCurrentUser().getEmail().replace("." , "");
+
+
+
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        database.getReference().child("user").child(email.replace(".","")).setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+        String location_id = locations_list.get( pager.getCurrentItem() ).location_id;
+        pd.show();
+
+        database.getReference().child("locations").child(email.replace(".","")).child(location_id).setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
 
             public void onComplete(@NonNull Task<Void> task) {
 
+                pd.hide();
                 if(task.isSuccessful())
                 {
 
-                    Toast.makeText(final_home_page.this , "Location removed" , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context , "Location removed" , Toast.LENGTH_SHORT).show();
 
                 }
                 else {
 
-                    Toast.makeText(final_home_page.this , "Error" , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context , "Error" , Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -332,5 +299,51 @@ public class final_home_page extends FragmentActivity
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.CAMERA},
                 PERMISSION_REQUEST_CODE);
+    }
+
+    private void get_locations()
+    {
+
+        pd.show();
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        String email = auth.getCurrentUser().getEmail().replace("." , "");
+
+        DatabaseReference reference = database.getReference("locations").child(email);
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                pd.hide();
+
+                locations_list.clear();
+
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren())
+                {
+                    locationDataModel dataModel = dataSnapshot1.getValue(locationDataModel.class);
+
+                    dataModel.location_id = dataSnapshot1.getKey();
+
+                    locations_list.add(dataModel);
+                }
+
+                pager.removeAllViews();
+
+                pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager() , locations_list));
+
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }
